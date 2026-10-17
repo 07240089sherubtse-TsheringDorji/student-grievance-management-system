@@ -1,0 +1,31 @@
+<%- include('partials/header',{title:'Student Grievance | Home'}) %>
+<section class="hero">
+  <span class="eyebrow">A better way to be heard</span>
+  <h1>Every concern deserves a clear response.</h1>
+  <p>Submit academic or campus-related grievances, receive a unique reference ID, and follow each update through a transparent process.</p>
+  <div class="actions" style="justify-content:center">
+    <% if (currentUser) { %><a class="btn" href="<%= homePath %>">Open Dashboard →</a>
+    <% } else { %><a class="btn" href="/register">Submit a Grievance</a><a class="btn secondary" href="/login">Log In</a><% } %>
+  </div>
+</section>
+<section class="stats-bar"><p><strong><%= stats.total %></strong> grievances recorded &nbsp;·&nbsp; <strong><%= stats.pending %></strong> awaiting review &nbsp;·&nbsp; <strong><%= stats.resolved + stats.closed %></strong> resolved or closed</p></section>
+<div class="section-title"><div><h2>How the system works</h2><p>A simple, trackable process from submission to resolution.</p></div></div>
+<section class="grid">
+  <article class="feature-card"><div class="feature-icon">✎</div><h3>01. Submit</h3><p class="muted">Choose a category and explain your concern with relevant details.</p></article>
+  <article class="feature-card"><div class="feature-icon">◷</div><h3>02. Track progress</h3><p class="muted">Use your dashboard and reference ID to follow status changes and updates.</p></article>
+  <article class="feature-card"><div class="feature-icon">✓</div><h3>03. Get a response</h3><p class="muted">View administrator responses and the history of actions taken.</p></article>
+</section>
+<div class="section-title"><div><h2>Built for the campus community</h2><p>One organized place for students and administrators.</p></div></div>
+<section class="two-col">
+  <article class="card"><div class="feature-icon">🎓</div><h3>For students</h3><p class="muted">Create an account, submit a grievance, review current status and access your submission history.</p><a href="<%= currentUser?'/dashboard':'/register' %>">Student workspace →</a></article>
+  <article class="card"><div class="feature-icon">🗂</div><h3>For administrators &amp; departments</h3><p class="muted">Administrators triage cases and assign them to departments. Department staff work only on the cases assigned to them.</p><a href="<%= currentUser&&currentUser.role!=='student'?homePath:'/login' %>">Staff access →</a></article>
+</section>
+
+<% if (currentUser) { %>
+<section class="card" style="margin-top:24px">
+  <div class="section-title" style="margin-top:0"><div><h2>Quick reference lookup</h2><p>Find a grievance using its reference ID.</p></div></div>
+  <div class="actions"><input id="referenceInput" placeholder="e.g. SGS-..." style="flex:1;min-width:220px;border:1px solid #dedede;border-radius:10px;padding:12px;font:inherit"><button id="lookupBtn" class="btn" type="button">Look Up</button></div>
+  <div id="lookupResult" style="margin-top:12px" aria-live="polite"></div>
+</section>
+<% } %>
+<%- include('partials/footer') %>

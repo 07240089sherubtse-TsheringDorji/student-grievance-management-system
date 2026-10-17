@@ -1,0 +1,11 @@
+<%- include('partials/header',{title:'About | Student Grievance'}) %>
+<section class="hero"><span class="eyebrow">About the project</span><h1>Clear communication. Better follow-up.</h1><p>The Student Complaint &amp; Grievance Management System provides a centralized digital workflow for academic and campus-related concerns at Sherubtse College.</p></section>
+<div class="section-title"><div><h2>Project purpose</h2><p>Replacing fragmented follow-ups with a structured process.</p></div></div>
+<section class="grid">
+ <article class="card"><div class="feature-icon">📌</div><h3>Structured submissions</h3><p class="muted">Every grievance contains a category, title, description and unique reference ID.</p></article>
+ <article class="card"><div class="feature-icon">🔎</div><h3>Transparent tracking</h3><p class="muted">Students can review current status, department assignment, responses and update history.</p></article>
+ <article class="card"><div class="feature-icon">🔐</div><h3>Role-based access</h3><p class="muted">Student and administrator features are separated by authentication and authorization.</p></article>
+</section>
+<div class="section-title"><h2>Grievance lifecycle</h2></div>
+<section class="card"><div class="actions"><span class="pill">SUBMITTED</span> → <span class="pill under-review">UNDER REVIEW</span> → <span class="pill assigned">ASSIGNED</span> → <span class="pill in-progress">IN PROGRESS</span> → <span class="pill resolved">RESOLVED</span> → <span class="pill closed">CLOSED</span></div><p class="muted">The application uses an MVC structure, RESTful API endpoints, PostgreSQL persistence and Node.js event listeners for secondary actions such as notifications.</p></section>
+<%- include('partials/footer') %>

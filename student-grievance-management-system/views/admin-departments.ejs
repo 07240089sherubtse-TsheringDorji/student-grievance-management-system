@@ -1,0 +1,9 @@
+<%- include('partials/header',{title:'Departments'}) %>
+<div class="section-head"><div><div class="eyebrow">Administration</div><h1>Departments</h1><p class="muted">Departments receive assigned grievances. Staff accounts are linked to a department under Users.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>Department</th><th>Staff accounts</th><th>Grievances</th><th>Rename</th></tr></thead><tbody>
+<% departments.forEach(d=>{ %><tr><td><strong><%= d.department_name %></strong></td><td><%= d.staff_count %></td><td><%= d.grievance_count %></td>
+<td><form method="post" action="/admin/departments/<%= d.department_id %>/rename" class="filters"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input name="department_name" value="<%= d.department_name %>" required minlength="2" maxlength="100"><button class="btn small" type="submit">Save</button></form></td></tr><% }) %>
+</tbody></table></div>
+<section class="card" style="margin-top:24px;max-width:560px"><h3>Add department</h3>
+<form method="post" action="/admin/departments"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><div class="field"><label for="department_name">Department name</label><input id="department_name" name="department_name" required minlength="2" maxlength="100"></div><button class="btn teal" type="submit">Create department</button></form></section>
+<%- include('partials/footer') %>
