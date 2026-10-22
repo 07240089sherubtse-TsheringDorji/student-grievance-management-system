@@ -29,9 +29,9 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
-  ssl: {
-    rejectUnauthorized: false
-  },
+  ssl: process.env.NODE_ENV === 'production'
+  ? { rejectUnauthorized: false }
+  : false,
   connectionTimeoutMillis: 10000
 });
 
