@@ -1,1 +1,22 @@
-<%- include('partials/header',{title:'Error '+code}) %><section class="card" style="max-width:650px;margin:50px auto;text-align:center"><div class="eyebrow">Request could not be completed</div><h1 style="font-size:54px;margin:8px"><%= code %></h1><h2><%= message %></h2><p class="muted">Return to the home page or go back to your dashboard.</p><div class="actions" style="justify-content:center"><a class="btn" href="/">Home</a><% if(currentUser){ %><a class="btn teal" href="<%= homePath %>">Dashboard</a><% } %></div></section><%- include('partials/footer') %>
+<%- include('partials/header', { title: 'Error ' + code }) %>
+
+<section class="card" style="max-width:650px;margin:50px auto;text-align:center">
+  <div class="eyebrow">Request could not be completed</div>
+  
+  <h1 style="font-size:54px;margin:8px"><%= code %></h1>
+  
+  <h2><%= message %></h2>
+  
+  <p class="muted">
+    Return to the home page or go back to your dashboard.
+  </p>
+
+  <div class="actions" style="justify-content:center">
+    <a class="btn" href="/">Home</a>
+    <% if (currentUser) { %>
+      <a class="btn teal" href="<%= homePath %>">Dashboard</a>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

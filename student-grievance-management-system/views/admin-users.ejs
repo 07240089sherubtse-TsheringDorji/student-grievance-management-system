@@ -1,19 +1,124 @@
-<%- include('partials/header',{title:'Manage users'}) %>
-<div class="section-head"><div><div class="eyebrow">Administration</div><h1>Users &amp; roles</h1><p class="muted">Create administrator and department-staff accounts, deactivate access or reset passwords.</p></div></div>
-<% if(tempPassword){ %><div class="alert"><strong>Temporary password for <%= tempPassword.email %>:</strong> <code><%= tempPassword.password %></code><br>Copy it now — it is shown only once. The user must change it at first login.</div><% } %>
-<% if(error){ %><div class="alert error"><%= error %></div><% } %>
-<div class="table-wrap"><table><thead><tr><th>Name / Email</th><th>Role</th><th>Department</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-<% users.forEach(u=>{ %><tr><td><strong><%= u.name %></strong><br><span class="muted"><%= u.email %></span></td><td><%= u.role %></td><td><%= u.department_name||'—' %></td><td><%= u.is_active?'Active':'Deactivated' %><%= u.must_change_password?' · must change password':'' %></td>
-<td><% if(u.user_id!==currentUser.user_id){ %>
-<form method="post" action="/admin/users/<%= u.user_id %>/toggle" style="display:inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn small" type="submit"><%= u.is_active?'Deactivate':'Reactivate' %></button></form>
-<form method="post" action="/admin/users/<%= u.user_id %>/reset-password" style="display:inline" onsubmit="return confirm('Reset this user\'s password?')"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn small" type="submit">Reset password</button></form>
-<% }else{ %><span class="muted">You</span><% } %></td></tr><% }) %>
-</tbody></table></div>
-<section class="card" style="margin-top:24px;max-width:650px"><h3>Create staff account</h3>
-<form method="post" action="/admin/users"><input type="hidden" name="_csrf" value="<%= csrfToken %>">
-<div class="field"><label for="name">Full name</label><input id="name" name="name" required minlength="2" maxlength="120" value="<%= form.name||'' %>"></div>
-<div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" required value="<%= form.email||'' %>"></div>
-<div class="field"><label for="role">Role</label><select id="role" name="role" required><option value="department" <%= form.role==='department'?'selected':'' %>>Department staff</option><option value="admin" <%= form.role==='admin'?'selected':'' %>>Administrator</option></select></div>
-<div class="field"><label for="department_id">Department (required for department staff)</label><select id="department_id" name="department_id"><option value="">— none —</option><% departments.forEach(d=>{ %><option value="<%= d.department_id %>" <%= String(form.department_id)===String(d.department_id)?'selected':'' %>><%= d.department_name %></option><% }) %></select></div>
-<button class="btn teal" type="submit">Create account</button></form></section>
-<%- include('partials/footer') %>
+<%- include('partials/header', { title: 'Manage users' }) %>
+
+<div class="section-head">
+  <div>
+    <div class="eyebrow">Administration</div>
+    <h1>Users &amp; roles</h1>
+    <p class="muted">
+      Create administrator and department-staff accounts, deactivate access or reset passwords.
+    </p>
+  </div>
+</div>
+
+<% if (tempPassword) { %>
+  <div class="alert">
+    <strong>Temporary password for <%= tempPassword.email %>:</strong> 
+    <code><%= tempPassword.password %></code><br>
+    Copy it now — it is shown only once. The user must change it at first login.
+  </div>
+<% } %>
+
+<% if (error) { %>
+  <div class="alert error"><%= error %></div>
+<% } %>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Name / Email</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td>
+            <strong><%= u.name %></strong><br>
+            <span class="muted"><%= u.email %></span>
+          </td>
+          <td><%= u.role %></td>
+          <td><%= u.department_name || '—' %></td>
+          <td>
+            <%= u.is_active ? 'Active' : 'Deactivated' %><%= u.must_change_password ? ' · must change password' : '' %>
+          </td>
+          <td>
+            <% if (u.user_id !== currentUser.user_id) { %>
+              <form method="post" action="/admin/users/<%= u.user_id %>/toggle" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn small" type="submit">
+                  <%= u.is_active ? 'Deactivate' : 'Reactivate' %>
+                </button>
+              </form>
+              <form 
+                method="post" 
+                action="/admin/users/<%= u.user_id %>/reset-password" 
+                style="display:inline" 
+                onsubmit="return confirm('Reset this user\'s password?')"
+              >
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn small" type="submit">Reset password</button>
+              </form>
+            <% } else { %>
+              <span class="muted">You</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<section class="card" style="margin-top: 24px; max-width: 650px;">
+  <h3>Create staff account</h3>
+  <form method="post" action="/admin/users">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <div class="field">
+      <label for="name">Full name</label>
+      <input 
+        id="name" 
+        name="name" 
+        required 
+        minlength="2" 
+        maxlength="120" 
+        value="<%= form.name || '' %>"
+      >
+    </div>
+
+    <div class="field">
+      <label for="email">Email address</label>
+      <input 
+        id="email" 
+        name="email" 
+        type="email" 
+        required 
+        value="<%= form.email || '' %>"
+      >
+    </div>
+
+    <div class="field">
+      <label for="role">Role</label>
+      <select id="role" name="role" required>
+        <option value="department" <%= form.role === 'department' ? 'selected' : '' %>>
+          Department staff
+        </option>
+        <option value="admin" <%= form.role === 'admin' ? 'selected' : '' %>>
+          Administrator
+        </option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="department_id">Department (required for department staff)</label>
+      <select id="department_id" name="department_id">
+        <option value="">— none —</option>
+        <% departments.forEach(d => { %>
+          <option 
+            value="<%= d.department_id %>" 
+            <%= String(form.department_id) === String(d.department_id) ? 'selected' : '' %>
+          >
+            <%= d.department_name %>

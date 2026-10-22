@@ -7,59 +7,102 @@
   const _token = typeof csrfToken !== 'undefined' ? csrfToken : '';
   const _role = _user ? _user.role : null;
   const _links = {
-    student:    [['Dashboard','/dashboard',/^\/(dashboard|grievances\/\d+)/],['Submit grievance','/grievances/new']],
-    department: [['Dashboard','/department',/^\/(department|grievances\/\d+)/]],
-    admin:      [['Dashboard','/admin',/^\/(admin\/?$|admin\/dashboard|grievances\/\d+)/],['Departments','/admin/departments'],['Users','/admin/users']]
+    student: [
+      ['Dashboard', '/dashboard', /^\/(dashboard|grievances\/\d+)/],
+      ['Submit grievance', '/grievances/new']
+    ],
+    department: [
+      ['Dashboard', '/department', /^\/(department|grievances\/\d+)/]
+    ],
+    admin: [
+      ['Dashboard', '/admin', /^\/(admin\/?$|admin\/dashboard|grievances\/\d+)/],
+      ['Departments', '/admin/departments'],
+      ['Users', '/admin/users']
+    ]
   };
   const _isActive = l => _path === l[1] || (l[2] && l[2].test(_path));
   const _roleLabel = _role === 'department' ? 'Department staff' : (_role ? _role.charAt(0).toUpperCase() + _role.slice(1) : '');
-%><!DOCTYPE html>
+%>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= typeof title !== 'undefined' ? title + ' · ' : '' %>Grievance Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' · ' : '' %>Grievance Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <% if (_shell) { %>
-<body class="app">
-<input type="checkbox" id="navtoggle" class="nav-toggle" aria-hidden="true">
-<div class="shell">
-  <aside class="sidebar">
-    <a class="brand" href="<%= _home %>"><span class="logo-mark">SC</span><span class="brand-text"><strong>Sherubtse College</strong><small>GRIEVANCE PORTAL</small></span></a>
-    <nav class="side-nav" aria-label="Main">
-      <div class="side-label">Workspace</div>
-      <% _links[_role].forEach(l => { %><a href="<%= l[1] %>" class="<%= _isActive(l) ? 'active' : '' %>"><%= l[0] %></a><% }) %>
-      <div class="side-label">General</div>
-      <a href="/" >Home</a>
-      <a href="/about" class="<%= _path === '/about' ? 'active' : '' %>">About</a>
-      <a href="/change-password" class="<%= _path === '/change-password' ? 'active' : '' %>">Change password</a>
-    </nav>
-    <div class="side-foot">
-      <span class="who"><%= _user.name %></span>
-      <span class="role"><%= _roleLabel %></span>
-      <form action="/logout" method="POST"><input type="hidden" name="_csrf" value="<%= _token %>"><button type="submit" class="link-btn">Log out →</button></form>
-    </div>
-  </aside>
-  <div class="content">
-    <header class="topbar">
-      <label for="navtoggle" class="menu-btn" aria-label="Toggle menu">☰</label>
-      <div class="crumb"><%= typeof title !== 'undefined' ? title : 'Grievance Portal' %></div>
-      <div class="chip"><%= _user.email %></div>
+  <body class="app">
+    <input type="checkbox" id="navtoggle" class="nav-toggle" aria-hidden="true">
+    <div class="shell">
+      <aside class="sidebar">
+        <a class="brand" href="<%= _home %>">
+          <span class="logo-mark">SC</span>
+          <span class="brand-text">
+            <strong>Sherubtse College</strong>
+            <small>GRIEVANCE PORTAL</small>
+          </span>
+        </a>
+        <nav class="side-nav" aria-label="Main">
+          <div class="side-label">Workspace</div>
+          <% _links[_role].forEach(l => { %>
+            <a href="<%= l[1] %>" class="<%= _isActive(l) ? 'active' : '' %>">
+              <%= l[0] %>
+            </a>
+          <% }) %>
+          <div class="side-label">General</div>
+          <a href="/">Home</a>
+          <a href="/about" class="<%= _path === '/about' ? 'active' : '' %>">About</a>
+          <a href="/change-password" class="<%= _path === '/change-password' ? 'active' : '' %>">Change password</a>
+        </nav>
+        <div class="side-foot">
+          <span class="who"><%= _user.name %></span>
+          <span class="role"><%= _roleLabel %></span>
+          <form action="/logout" method="POST">
+            <input type="hidden" name="_csrf" value="<%= _token %>">
+            <button type="submit" class="link-btn">Log out →</button>
+          </form>
+        </div>
+      </aside>
+
+      <div class="content">
+        <header class="topbar">
+          <label for="navtoggle" class="menu-btn" aria-label="Toggle menu">☰</label>
+          <div class="crumb">
+            <%= typeof title !== 'undefined' ? title : 'Grievance Portal' %>
+          </div>
+          <div class="chip"><%= _user.email %></div>
+        </header>
+        <main>
+<% } else { %>
+  <body class="public">
+    <header class="topbar-public">
+      <a class="brand" href="/">
+        <span class="logo-mark">SC</span>
+        <span class="brand-text">
+          <strong>Sherubtse College</strong>
+          <small>GRIEVANCE PORTAL</small>
+        </span>
+      </a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <% if (_user) { %>
+          <a class="cta" href="<%= _home %>">Go to dashboard</a>
+        <% } else { %>
+          <a href="/login">Log in</a>
+          <a class="cta" href="/register">Sign up</a>
+        <% } %>
+      </nav>
     </header>
     <main>
-<% } else { %>
-<body class="public">
-<header class="topbar-public">
-  <a class="brand" href="/"><span class="logo-mark">SC</span><span class="brand-text"><strong>Sherubtse College</strong><small>GRIEVANCE PORTAL</small></span></a>
-  <nav>
-    <a href="/">Home</a><a href="/about">About</a>
-    <% if (_user) { %><a class="cta" href="<%= _home %>">Go to dashboard</a>
-    <% } else { %><a href="/login">Log in</a><a class="cta" href="/register">Sign up</a><% } %>
-  </nav>
-</header>
-<main>
 <% } %>
-<% if (_notice) { %><div class="alert <%= _notice.type === 'error' ? 'error' : '' %>"><%= _notice.text %></div><% } %>
+
+<% if (_notice) { %>
+  <div class="alert <%= _notice.type === 'error' ? 'error' : '' %>">
+    <%= _notice.text %>
+  </div>
+<% } %>

@@ -1,1 +1,67 @@
-<%- include('partials/header',{title:'Submit grievance'}) %><section class="card form-card"><div class="eyebrow">Tell us what happened</div><h1>Submit a grievance</h1><p class="muted">Provide clear details so the concern can be reviewed and assigned appropriately.</p><% if(error){ %><div class="alert error"><%= error %></div><% } %><form method="post" action="/grievances"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><div class="field"><label for="category_id">Category</label><select id="category_id" name="category_id" required><option value="">Choose a category</option><% categories.forEach(c=>{ %><option value="<%= c.category_id %>"><%= c.category_name %> — <%= c.description %></option><% }) %></select></div><div class="field"><label for="title">Grievance title</label><input id="title" name="title" required minlength="4" maxlength="180" placeholder="e.g. Classroom projector is not functioning"></div><div class="field"><label for="description">Detailed description</label><textarea id="description" name="description" required minlength="10" maxlength="5000" placeholder="Explain the issue, where it occurred, and any relevant details..."></textarea><small id="descriptionCounter" class="muted">0 / 5000 characters</small><br><small class="muted">10–5000 characters. Avoid including passwords or other sensitive information.</small></div><div class="actions"><button class="btn teal" type="submit">Submit grievance</button><a class="btn secondary" href="/dashboard">Cancel</a></div></form></section><%- include('partials/footer') %>
+<%- include('partials/header', { title: 'Submit grievance' }) %>
+
+<section class="card form-card">
+  <div class="eyebrow">Tell us what happened</div>
+  
+  <h1>Submit a grievance</h1>
+  
+  <p class="muted">
+    Provide clear details so the concern can be reviewed and assigned appropriately.
+  </p>
+
+  <% if (error) { %>
+    <div class="alert error">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <form method="post" action="/grievances">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <div class="field">
+      <label for="category_id">Category</label>
+      <select id="category_id" name="category_id" required>
+        <option value="">Choose a category</option>
+        <% categories.forEach(c => { %>
+          <option value="<%= c.category_id %>">
+            <%= c.category_name %> — <%= c.description %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="title">Grievance title</label>
+      <input 
+        id="title" 
+        name="title" 
+        required 
+        minlength="4" 
+        maxlength="180" 
+        placeholder="e.g. Classroom projector is not functioning"
+      >
+    </div>
+
+    <div class="field">
+      <label for="description">Detailed description</label>
+      <textarea 
+        id="description" 
+        name="description" 
+        required 
+        minlength="10" 
+        maxlength="5000" 
+        placeholder="Explain the issue, where it occurred, and any relevant details..."
+      ></textarea>
+      <small id="descriptionCounter" class="muted">0 / 5000 characters</small>
+      <br>
+      <small class="muted">10–5000 characters. Avoid including passwords or other sensitive information.</small>
+    </div>
+
+    <div class="actions">
+      <button class="btn teal" type="submit">Submit grievance</button>
+      <a class="btn" style="background:#e8edf5;color:#263449" href="/dashboard">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<%- include('partials/footer') %>
